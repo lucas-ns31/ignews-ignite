@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 type Post = {
   slug: string;
   title: string;
-  abstract: string;
+  excerpt: string;
   updatedAt: string;
 };
 
@@ -28,7 +28,7 @@ export default function Posts({ posts }: PostsProps) {
             <a key={post.slug} href="#">
               <time>{post.updatedAt}</time>
               <strong>{post.title}</strong>
-              <p>{post.abstract}</p>
+              <p>{post.excerpt}</p>
             </a>
           ))}
         </div>
@@ -45,16 +45,25 @@ export const getStaticProps: GetStaticProps = async () => {
     pageSize: 10,
   });
 
-  // RESOLVER LOGICA PARA PUXAR APENAS O PRIMEIRO PARAGRAFO
+  // RESOLVER LOGICA PARA PUXAR APENAS O PRIMEIRO PARAGRAFO **********
 
   const posts = response.map((post) => {
     return {
       slug: post.uid,
       title: RichText.asText(post.data.title),
-      abstract:
-        post.data.content.find((content) => content).type === 'paragraph'
-          ? post.data.content.map((content) => content.text)
-          : '',
+      // Retornando resumo do texto do conteudo
+      excerpt: post.data.content.map((content) => {
+        const text = content.text;
+
+        const breakText = text.split('\n');
+
+        return breakText[2];
+      }),
+
+      // excerpt:
+      //   post.data.content.find((content) => content.type === 'paragraph')
+      //     ?.text ?? '',
+
       updatedAt: new Date(post.last_publication_date).toLocaleDateString(
         'pt-BR',
         {
@@ -65,6 +74,8 @@ export const getStaticProps: GetStaticProps = async () => {
       ),
     };
   });
+
+  // console.log(JSON.stringify(posts, null, 2));
 
   return {
     props: {

@@ -10,16 +10,16 @@ interface PostDocumentData {
   /**
    * Title field in *Post*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
    * - **API ID Path**: post.title
    * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
    *
    */
-  title: prismic.RichTextField;
+  title: prismic.KeyTextField;
   /**
-   * Content field in *Post*
+   * content field in *Post*
    *
    * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
